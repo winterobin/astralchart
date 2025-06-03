@@ -1,51 +1,62 @@
-Solar System Visualization with Marimo
-This project is an interactive visualization of the solar system (up to Mars) created using Python and Marimo.
+# 🌞 Solar System Visualization with Marimo 🚀
+An interactive and dynamic solar system visualization built in Python using Marimo, showing the orbits of Mercury, Venus, Earth, and Mars around the Sun.
 
-Features
-Displays the Sun and planets Mercury, Venus, Earth, and Mars orbiting around it.
+---
 
-Shows planetary orbits as dashed circles.
+## ✨ Features
+- 🌍 Displays the Sun and first four planets with accurate orbits
 
-Includes a dropdown menu to select the date (day, month, year).
+- 🔄 Planets move according to the selected date
 
-Planet positions update dynamically based on the selected date.
+- 📅 Select any date via dropdown menus for Day, Month, and Year
 
-Dark theme with clear legend showing planet names in white.
+- 🎨 Dark theme with white labels and colored planets
 
-Installation
-Make sure you have Python installed (version 3.7 or higher recommended).
+- 🔭 Dashed circular orbits for a clean look
 
-Install the required packages:
+- 🪐 Legend with planet names in white for easy identification
 
-bash
-Copia
-Modifica
+---
+
+## ⚙️ Installation
+Make sure you have Python 3.7+ installed.
+
+Install dependencies via pip:
+
 pip install marimo numpy matplotlib skyfield pillow
-How to Run
-Run the main script (e.g. app.py) with:
 
-bash
-Copia
-Modifica
+---
+
+## ▶️ How to Run
+Run your main app script (e.g., app.py):
+
 python app.py
-This will start the Marimo app in your default browser.
 
-Usage
-Use the dropdown menus to select the day, month, and year.
+The app will open in your default web browser.
 
-The plot updates automatically to show the planetary positions for the selected date.
+---
 
-The orbits are displayed as dashed circles, and planets as colored dots.
+## 🖱️ Usage
+- Use dropdown menus to pick a specific date (Day, Month, Year)
 
-The legend identifies each planet by color.
+- The solar system visualization updates in real-time
 
-Code Structure
-planets dictionary defines orbital radius, orbital speed, and color for each planet.
+- See the planets orbiting with their respective colors and the Sun at the center
 
-genera_sistema_solare(date) function generates the plot image for the given date.
+- View the orbits as dashed rings around the Sun
 
-Marimo UI components handle user input and display the image.
+- Planet names are displayed in a clear legend on the top right
 
-License
-MIT License
+---
 
+## 🧩 Code Overview
+- planets dictionary contains data on each planet's orbital radius, speed, and color
+
+- genera_sistema_solare(date) generates the matplotlib plot for the selected date
+
+- Marimo UI components create dropdown menus and display the generated image dynamically
+
+---
+
+## 📄 License
+This project is released under the MIT License.
