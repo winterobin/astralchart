@@ -25,10 +25,10 @@ def _():
 @app.cell
 def _(dt, mo):
     datetime_picker = mo.ui.datetime(
-        start=dt.datetime(2023, 1, 1),
-        stop=dt.datetime(2023, 12, 31, 23, 59, 59),
+        start=dt.datetime(1900, 1, 1),
+        stop=dt.datetime(2200, 12, 31, 23, 59, 59),
+        value=dt.datetime.now(),
     )
-
     datetime_picker
     return (datetime_picker,)
 
@@ -144,8 +144,9 @@ def _(Time, datetime_picker):
 def _(solar_system_ephemeris):
     bodies = list(solar_system_ephemeris.bodies)
     bodies.remove("earth-moon-barycenter")
+    bodies.append("pluto")
 
-    colors = ["blue", "gold", "silver", "gray", "yellow", "red", "khaki", "purple", "cyan", "navy"]
+    colors = ["blue", "gold", "silver", "gray", "yellow", "red", "khaki", "purple", "cyan", "navy", "black"]
 
     body_color_map = dict(zip(bodies, colors))
 
@@ -154,24 +155,34 @@ def _(solar_system_ephemeris):
 
 
 @app.cell
-def _(body_color_map, get_body, np, obs_time, pd, ref_zodiac, u):
+def _(
+    body_color_map,
+    get_body,
+    np,
+    obs_time,
+    pd,
+    ref_zodiac,
+    solar_system_ephemeris,
+    u,
+):
     tmp_data = []
-    for body in body_color_map.keys():
-        skycoord = get_body(body, time=obs_time, location=None)
-
-        tmp_data.append(
-            {
-                "body": body.capitalize(),
-                "skycoord": skycoord,
-                "x_au": skycoord.cartesian.x.to(u.AU).value,
-                "y_au": skycoord.cartesian.y.to(u.AU).value,
-                "z_au": skycoord.cartesian.z.to(u.AU).value,
-                "radius_au": skycoord.spherical.distance.to(u.AU).value,
-                "lat_rad": skycoord.spherical.lat.to(u.rad).value,
-                "lon_rad": skycoord.spherical.lon.to(u.rad).value,
-                "color": body_color_map[body]
-            }
-        )
+    with solar_system_ephemeris.set('de430'):
+        for body in body_color_map.keys():
+            skycoord = get_body(body, time=obs_time, location=None)
+    
+            tmp_data.append(
+                {
+                    "body": body.capitalize(),
+                    "skycoord": skycoord,
+                    "x_au": skycoord.cartesian.x.to(u.AU).value,
+                    "y_au": skycoord.cartesian.y.to(u.AU).value,
+                    "z_au": skycoord.cartesian.z.to(u.AU).value,
+                    "radius_au": skycoord.spherical.distance.to(u.AU).value,
+                    "lat_rad": skycoord.spherical.lat.to(u.rad).value,
+                    "lon_rad": skycoord.spherical.lon.to(u.rad).value,
+                    "color": body_color_map[body]
+                }
+            )
 
     df_geocentric = pd.DataFrame(tmp_data)
     df_geocentric = df_geocentric.sort_values(by='radius_au',ascending=True)
@@ -278,125 +289,29 @@ def _(alt, body_color_map, df_geocentric, np, ref_zodiac):
         chart_gc_zodiac_text,
         chart_gc,
         resolve={"scale": {"color": "independent"}},
-    ).configure_axis(grid=False).configure_view(stroke=None)
+    ).configure_axis(grid=False).configure_view(stroke=None).configure_legend(
+        padding=50,
+    )
     return
 
 
 @app.cell
-def _(mo, obs_time):
-    mo.md(f"On date {obs_time} this is your astral chart:   \
-            - Sun \
-          ")
-    return
-
-
-@app.cell
-def _():
-    # chart_gc_zodiac = (
-    #     alt.Chart(ref_zodiac)
-    #     .mark_arc()
-    #     .encode(
-    #         theta=alt.Theta("lon_rad_delta:Q", sort=None),
-    #         color=alt.Color(
-    #             "name:N",
-    #             sort=None,
-    #             scale=alt.Scale(
-    #                 domain=ref_zodiac["name"].tolist(),
-    #                 range=[
-    #                     "#e6194b", "#3cb44b", "#ffe119", "#4363d8", "#f58231", "#911eb4",
-    #                     "#46f0f0", "#f032e6", "#bcf60c", "#fabebe", "#008080", "#e6beff"
-    #                 ],
-                
-    #             ),
-    #             legend=alt.Legend(title="Zodiac Sign")
-    #         ),
-    #     )
-    #     .properties(width=400, height=400)
-    # )
-    return
-
-
-@app.cell
-def _():
-    # # List of planets (excluding Earth for clarity, but you can include it)
-    # planets = [
-    #     "sun",
-    #     "mercury",
-    #     "venus",
-    #     "earth",
-    #     "mars",
-    # #    "jupiter",
-    # #    "saturn",
-    # #    "uranus",
-    # #    "neptune",
-    # ]
-
-    # planets_colors = [
-    #     "orange",
-    #     "gray",
-    #     "yellow",
-    #     "blue",
-    #     "red",
-    # #    "jupiter",
-    # #    "saturn",
-    # #    "uranus",
-    # #    "neptune",
-    # ]
-
-    # # Set the observation time
-
-
-    # data = []
-    # for planet in planets:
-    #     pos = get_body_barycentric(planet, obs_time)
-    #     sph = pos.represent_as(SphericalRepresentation)
-
-    #     data.append(
-    #         {
-    #             "planet": planet.capitalize(),
-    #             "x_au": pos.x.to(u.AU).value,
-    #             "y_au": pos.y.to(u.AU).value,
-    #             "z_au": pos.z.to(u.AU).value,
-    #             "radius_au": sph.distance.to(u.AU).value,
-    #             "lat_rad": sph.lat.to(u.rad).value,
-    #             "lon_rad": sph.lon.to(u.rad).value,
-    #         }
-    #     )
-
-
-    # df_heliocentric = pd.DataFrame(data)
-    # df_heliocentric.insert(value=planets_colors, loc=1, column="color")
-    # #df_heliocentric
-
-
-    return
-
-
-@app.cell
-def _():
-    # color_scale = alt.Scale(
-    #     domain=[p.capitalize() for p in planets],
-    #     range=planets_colors
-    # )
-
-    # chart_hc = (
-    #     alt.Chart(df_heliocentric)
-    #     .mark_circle()
-    #     .encode(
-    #         x=alt.X("x_au", scale=alt.Scale(domain=[-3, 3], clamp=True)),
-    #         y=alt.Y("y_au", scale=alt.Scale(domain=[-3, 3], clamp=True)),
-    #         color=alt.Color(
-    #             "planet:N",
-    #             scale=color_scale,
-    #             legend=alt.Legend(title="Planet")
-    #         ),
-    #         tooltip=["planet", "x_au", "y_au"]
-    #     )
-    #     .properties(width=400, height=400)
-    # )
-
-    # mo.ui.altair_chart(chart_hc)
-
+def _(df_geocentric, mo, obs_time):
+    mo.md(
+        f"""
+    On date {obs_time} this is your astral chart:   
+            - Sun ☉: {df_geocentric.loc[df_geocentric["body"] == "Sun", "zodiac_sign"].values[0].capitalize()}  
+            - Moon ☽: {df_geocentric.loc[df_geocentric["body"] == "Moon", "zodiac_sign"].values[0].capitalize()}  
+            - Mercury ☿: {df_geocentric.loc[df_geocentric["body"] == "Mercury", "zodiac_sign"].values[0].capitalize()}  
+            - Venus ♀: {df_geocentric.loc[df_geocentric["body"] == "Venus", "zodiac_sign"].values[0].capitalize()}  
+            - Mars ♂: {df_geocentric.loc[df_geocentric["body"] == "Mars", "zodiac_sign"].values[0].capitalize()}  
+            - Jupiter ♃: {df_geocentric.loc[df_geocentric["body"] == "Jupiter", "zodiac_sign"].values[0].capitalize()}  
+            - Saturn ♄: {df_geocentric.loc[df_geocentric["body"] == "Saturn", "zodiac_sign"].values[0].capitalize()}  
+            - Uranus ♅: {df_geocentric.loc[df_geocentric["body"] == "Uranus", "zodiac_sign"].values[0].capitalize()}  
+            - Neptune ♆: {df_geocentric.loc[df_geocentric["body"] == "Neptune", "zodiac_sign"].values[0].capitalize()}  
+            - Pluto ♇: {df_geocentric.loc[df_geocentric["body"] == "Pluto", "zodiac_sign"].values[0].capitalize()}
+    """
+    )
     return
 
 
