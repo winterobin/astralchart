@@ -30,7 +30,7 @@ An interactive and dynamic solar system and astral chart visualization built in 
 
 3. **Run the app**
     ```bash
-    uvx marimo run astralchart.py
+    uv run marimo run astralchart.py
     ```
 
 ## 🖱️ Usage
