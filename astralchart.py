@@ -8,14 +8,9 @@ app = marimo.App(width="medium")
 def _():
     import marimo as mo
     import numpy as np
-    import matplotlib.pyplot as plt
-    from io import BytesIO
-    from PIL import Image
-    import base64
     import datetime as dt
     from astropy.time import Time
     from astropy.coordinates import get_body_barycentric, SphericalRepresentation, solar_system_ephemeris, get_body
-
     import astropy.units as u
     import pandas as pd
     import altair as alt
