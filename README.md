@@ -1,62 +1,52 @@
-# 🌞 Solar System Visualization with Marimo 🚀
-An interactive and dynamic solar system visualization built in Python using Marimo, showing the orbits of Mercury, Venus, Earth, and Mars around the Sun.
+# 🌞 Astral Chart Visualization 🪐
+
+An interactive and dynamic solar system and astral chart visualization built in Python using [Astropy](https://www.astropy.org/) and [Marimo](https://marimo.io/). This app lets you explore planetary positions and zodiac signs for any date, rendered with modern data visualization tools.
 
 ---
 
 ## ✨ Features
-- 🌍 Displays the Sun and first four planets with accurate orbits
 
-- 🔄 Planets move according to the selected date
-
-- 📅 Select any date via dropdown menus for Day, Month, and Year
-
-- 🎨 Dark theme with white labels and colored planets
-
-- 🔭 Dashed circular orbits for a clean look
-
-- 🪐 Legend with planet names in white for easy identification
+- 🪐 Zodiac sign calculation for each planet  
+- 🌍 Visualizes the Sun and planets with accurate orbits and positions
+- 📅 Select any date and see the planetary configuration and zodiac signs
+- 🎨 Interactive charts and clean UI powered by Marimo and Altair
+- 🖥️ Modern Python stack with reproducible environments
 
 ---
 
-## ⚙️ Installation
-Make sure you have Python 3.7+ installed.
+## ⚙️ Install and Run
 
-Install dependencies via pip:
+1. Make sure you have Python 3.12+ installed.
+2. Install [uv](https://github.com/astral-sh/uv) for fast dependency management.
+    ```bash
+    pip install uv
+    ```
 
-pip install marimo numpy matplotlib skyfield pillow
+2. **Clone the repo:**
+    ```sh
+    git clone https://github.com/winterobin/astralchart
+    cd astralchart
+    ```
 
----
-
-## ▶️ How to Run
-Run your main app script (e.g., app.py):
-
-python app.py
-
-The app will open in your default web browser.
-
----
+3. **Run the app**
+    ```bash
+    uvx marimo run astralchart.py
+    ```
 
 ## 🖱️ Usage
-- Use dropdown menus to pick a specific date (Day, Month, Year)
 
-- The solar system visualization updates in real-time
-
-- See the planets orbiting with their respective colors and the Sun at the center
-
-- View the orbits as dashed rings around the Sun
-
-- Planet names are displayed in a clear legend on the top right
+- Use the date picker to select a specific date
+- The visualization updates in real-time to show planetary positions and zodiac signs
+- View the planet locations and zodiac overlays interactively
 
 ---
 
-## 🧩 Code Overview
-- planets dictionary contains data on each planet's orbital radius, speed, and color
+## 🛠️ Built With
 
-- genera_sistema_solare(date) generates the matplotlib plot for the selected date
-
-- Marimo UI components create dropdown menus and display the generated image dynamically
+- [Astropy](https://www.astropy.org/) — Astronomy calculations and ephemeris
+- [Marimo](https://marimo.io/) — Interactive Python apps and notebooks
+- [uv](https://github.com/astral-sh/uv) — Fast Python package management
+- [Altair](https://altair-viz.github.io/) — Declarative statistical visualization
+- [NumPy](https://numpy.org/), [Pandas](https://pandas.pydata.org/)
 
 ---
-
-## 📄 License
-This project is released under the MIT License.
